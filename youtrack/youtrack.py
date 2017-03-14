@@ -92,6 +92,7 @@ class YouTrackObject(Py3Cmp):
     _data = {}
 
     def __init__(self, xml=None, youtrack=None):
+        self._data = dict()
         self.youtrack = youtrack
         self._attribute_types = dict()
         self._update(xml)
@@ -172,6 +173,8 @@ class YouTrackObject(Py3Cmp):
 
     def __setattr__(self, key, value):
         key = to_str(key)
+        if key == '_data':
+            return super().__setattr__(key, value)
         if key in self:
             self[key] = value
         else:
@@ -194,7 +197,7 @@ class YouTrackError(YouTrackObject):
 
 class Issue(YouTrackObject):
     def __init__(self, xml=None, youtrack=None):
-        YouTrackObject.__init__(self, xml, youtrack)
+        super().__init__(xml, youtrack)
         if xml is not None:
             if len(xml.getElementsByTagName('links')) > 0:
                 self.links = [Link(e, youtrack) for e in xml.getElementsByTagName('issueLink')]
