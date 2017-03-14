@@ -166,10 +166,9 @@ class YouTrackObject(Py3Cmp):
     def __getattr__(self, item):
         if item in self:
             return self[item]
-        elif item in self._data:
+        if item in self._data:
             return self._data[item]
-        else:
-            return self.__getattr__(item)
+        raise AttributeError
 
     def __setattr__(self, key, value):
         key = to_str(key)
